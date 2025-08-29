@@ -20,7 +20,7 @@ class FormationType extends AbstractType
             ->add('prix', NumberType::class)
             ->add('duree', TextType::class, [
                 'label' => 'Durée',
-                'attr' => ['placeholder' => 'ex: 3 mois, 6 mois'],
+                'attr' => ['placeholder' => 'ex: 2 mois, 6 mois'],
             ])
         ;
     }
