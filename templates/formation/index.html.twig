@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Formations{% endblock %}
+
+{% block main %}
+<div class="container mt-4">
+
+    <h1 class="mb-4">Liste des Formations</h1>
+
+    <div class="d-flex justify-content-end mb-3">
+        <a href="{{ path('app_formation_new') }}" class="btn btn-primary">Ajouter une Formation</a>
+    </div>
+
+    <div class="table-responsive">
+        <table class="table table-striped table-hover align-middle">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Description</th>
+                    <th>Prix (CFA)</th>
+                    <th>Durée</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for formation in formations %}
+                    <tr>
+                        <td>{{ formation.id }}</td>
+                        <td>{{ formation.nom }}</td>
+                        <td>{{ formation.description }}</td>
+                        <td>{{ formation.prix|number_format(2, ',', ' ') }}</td>
+                        <td>{{ formation.duree }}</td> 
+                        <td>
+                            <a href="{{ path('app_formation_edit', {'id': formation.id}) }}" class="btn btn-sm btn-warning me-1">Modifier</a>
+                            <form method="post" action="{{ path('app_formation_delete', {'id': formation.id}) }}" style="display:inline-block;" onsubmit="return confirm('Voulez-vous vraiment supprimer cette formation ?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ formation.id) }}">
+                                <button class="btn btn-sm btn-danger">Supprimer</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="5" class="text-center">Aucune formation trouvée</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+</div>
+{% endblock %}

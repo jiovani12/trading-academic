@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ form.vars.value.id ? 'Modifier' : 'Nouvelle' }} Inscription{% endblock %}
+
+{% block main %}
+<div class="container mt-4">
+    <h1>{{ form.vars.value.id ? 'Modifier' : 'Nouvelle' }} Inscription</h1>
+
+    {{ form_start(form, {'attr': {'class': 'needs-validation'}}) }}
+        <div class="mb-3">
+            {{ form_label(form.nom) }}
+            {{ form_widget(form.nom, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.nom) }}
+        </div>
+        <div class="mb-3">
+            {{ form_label(form.prenom) }}
+            {{ form_widget(form.prenom, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.prenom) }}
+        </div>
+        <div class="mb-3">
+            {{ form_label(form.email) }}
+            {{ form_widget(form.email, {'attr': {'class': 'form-control'}}) }}
+            {{ form_errors(form.email) }}
+        </div>
+
+        <div class="mb-3">
+            <h4>Choisissez une formation</h4>
+            <div class="row">
+                {% for formation in formations %}
+                    <div class="col-md-4">
+                        <div class="card mb-3 shadow-sm h-100">
+                            <div class="card-body d-flex flex-column">
+                                <h5 class="card-title">{{ formation.nom }}</h5>
+                                <p class="card-text">{{ formation.description }}</p>
+                                
+                                {# Prix en bleu #}
+                                <p class="card-text fw-bold text-primary">
+                                    Prix : {{ formation.prix }} Fcfa
+                                </p>
+                                
+                                {# Durée en noir pur #}
+                                <p class="card-text text-secondary">
+                                    Durée : {{ formation.duree }}
+                                </p>
+
+                                <div class="mt-auto">
+                                    <input type="radio" 
+                                           id="formation_{{ formation.id }}" 
+                                           name="{{ form.formation.vars.full_name }}" 
+                                           value="{{ formation.id }}"
+                                           {% if form.formation.vars.value and form.formation.vars.value.id == formation.id %}checked{% endif %}
+                                           class="form-check-input">
+                                    <label for="formation_{{ formation.id }}" class="form-check-label">Sélectionner</label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            {{ form_errors(form.formation) }}
+        </div>
+
+        {# Champ caché pour le CSRF et autres #}
+        {{ form_rest(form) }}
+
+        <button type="submit" class="btn btn-success mt-2">
+            {{ form.vars.value.id ? 'Modifier' : 'Créer' }}
+        </button>
+    {{ form_end(form, {'render_rest': false}) }}
+
+    <a href="{{ path('app_inscription_index') }}" class="btn btn-secondary mt-2">Retour à la liste</a>
+</div>
+{% endblock %}
